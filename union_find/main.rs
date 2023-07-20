@@ -32,12 +32,18 @@ mod graphs {
         }
 
         pub fn union(&mut self, p: usize, q: usize) {
-            let i = self.find(p);
-            let j = self.find(q);
-            if i == j {
+            let pId = self.find(p);
+            let qId = self.find(q);
+            if pId == qId {
                 return
             }
-            self._id[i] = j;
+
+            for i in 0..self._id.len() {
+                if self._id[i] == pId {
+                    self._id[i] = qId;
+                }
+            }
+
             self._count -= 1;
         }
     }
@@ -64,6 +70,9 @@ fn main() {
         let mut q: usize = 0;
         match result {
             Ok(values) => {
+                if values.len() == 0 {
+                    break;
+                }
                 p = values[0];
                 q = values[1];
             },
@@ -77,7 +86,7 @@ fn main() {
             continue;
         }
         unionFind.union(p, q);
-        print!("{} {}", p, q);
+        println!("{} {}", p, q);
     }
     println!("{} components", unionFind.count());
 }
